@@ -23,5 +23,6 @@ public class _stack {
         stack.push("Bunny");
 
         System.out.println(stack);
+        System.out.println(stack.search("Tommy")); // -1 (not found)
     }
 }

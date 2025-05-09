@@ -1,4 +1,7 @@
-public class dynamicArrays{
+package Arrays;
+import java.util.ArrayList;
+
+public class _dynamicArrays{
     public static void main(String[] args) {
         /*
          * Advantages of Dynamic Arrays:
@@ -14,5 +17,11 @@ public class dynamicArrays{
          * 3. Expanding or shrinking the array is costly. O(n) time complexity.
          * 4. Insertion and deletion of elements is costly. O(n) time complexity.
          */
+
+         ArrayList<String> arrayList = new ArrayList<String>();
+
+         
+
+
     }
 }

@@ -7,7 +7,8 @@ class TreeNode{
         left = right = null;
     }
 }
-
+// package BST;
+// Compare this snippet from Arrays/DynamicArray.java:
 class BinarySearchTree{
     TreeNode root;
     

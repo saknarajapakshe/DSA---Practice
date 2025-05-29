@@ -2,11 +2,13 @@ package BST;
 
 public class Node {
     int data;
-    Node left;
-    Node right; 
+    Node left,right;
 
-    public Node(int data){
+    Node(int data){
         this.data = data;
+        left = right = null;
+
     }
+
 
 }

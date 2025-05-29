@@ -1,0 +1,313 @@
+import java.util.*;
+
+/*
+class TreeNode {
+    int key;
+    TreeNode left, right;
+
+    TreeNode(int key) {
+        this.key = key;
+        left = right = null;
+    }
+}
+*/
+
+class BST {
+    // public TreeNode root;
+
+    // BST() {
+    //     root = null;
+    // }
+
+    // public void insert(int key) {
+    //     root = insertRec(root, key);
+    // }
+
+    // public TreeNode insertRec(TreeNode root, int key) {
+    //     if (root == null) {
+    //         root = new TreeNode(key);
+    //         return root;
+    //     }
+
+    //     if (key < root.key) {
+    //         root.left = insertRec(root.left, key);
+    //     } else if (key > root.key) {
+    //         root.right = insertRec(root.right, key);
+    //     }
+
+    //     return root;
+    // }
+
+    public void delete(int key) {
+        TreeNode node = findNode(root, key);
+        if (node == null) {
+            System.out.println("Node does not exist with key " + key);
+        } // You can use deleteRec method(it handles all of the followings)
+        else if (node.left == null && node.right == null) {
+            root = deleteLeaf(root, key);
+        } else if (node.left != null && node.right != null) {
+            root = deleteWithTwoChildren(root, key);
+        } else {
+            root = deleteWithOneChild(root, key);
+        }
+    }
+
+    // private TreeNode findNode(TreeNode root, int key) {
+    //     if (root == null) {
+    //         return null;
+    //     }
+    //     if (key < root.key) {
+    //         return findNode(root.left, key);
+    //     } else if (key > root.key) {
+    //         return findNode(root.right, key);
+    //     } else {
+    //         return root;
+    //     }
+    // }
+
+    public TreeNode deleteLeaf(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (key < root.key) {
+            root.left = deleteLeaf(root.left, key);
+        } else if (key > root.key) {
+            root.right = deleteLeaf(root.right, key);
+        } else {
+            root = null;
+        }
+        return root;
+    }
+
+    public TreeNode deleteWithOneChild(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (key < root.key) {
+            root.left = deleteWithOneChild(root.left, key);
+        } else if (key > root.key) {
+            root.right = deleteWithOneChild(root.right, key);
+        } else {
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+        }
+        return root;
+    }
+
+    public TreeNode deleteWithTwoChildren(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (key < root.key) {
+            root.left = deleteWithTwoChildren(root.left, key);
+        } else if (key > root.key) {
+            root.right = deleteWithTwoChildren(root.right, key);
+        } else {
+            TreeNode successor = findSuccessor(root.right);
+            if (successor == null) {
+                return null;
+            }
+            root.key = successor.key;
+            root.right = deleteWithTwoChildren(root.right, successor.key);
+        }
+        return root;
+    }
+
+    public TreeNode findSuccessor(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        while (root.left != null) {
+            root = root.left;
+        }
+        return root;
+    }
+
+    // combination of all deletes in one
+    public TreeNode deleteRec(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (key < root.key) {
+            root.left = deleteRec(root.left, key);
+        } else if (key > root.key) {
+            root.right = deleteRec(root.right, key);
+        } else {
+            if (root.left == null && root.right == null) {
+                return null;
+            } else if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            } else {
+                TreeNode successor = findSuccessor(root.right);
+                root.key = successor.key;
+                root.right = deleteRec(root.right, successor.key);
+            }
+        }
+        return root;
+    }
+
+    public void preOrder() {
+        preOrderRec(root);
+    }
+
+    private void preOrderRec(TreeNode root) {
+        if (root != null) {
+            System.out.print(root.key + " ");
+            preOrderRec(root.left);
+            preOrderRec(root.right);
+        }
+    }
+
+    public void inOrder() {
+        inOrderRec(root);
+    }
+
+    private void inOrderRec(TreeNode root) {
+        if (root != null) {
+            inOrderRec(root.left);
+            System.out.print(root.key + " ");
+            inOrderRec(root.right);
+        }
+    }
+
+    public void postOrder() {
+        postOrderRec(root);
+    }
+
+    private void postOrderRec(TreeNode root) {
+        if (root != null) {
+            postOrderRec(root.left);
+            postOrderRec(root.right);
+            System.out.print(root.key + " ");
+        }
+    }
+
+    public void bfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            System.out.print(node.key + " ");
+            if (node.left != null) {
+                queue.add(node.left);
+            }
+            if (node.right != null) {
+                queue.add(node.right);
+            }
+        }
+    }
+
+    // Special functions
+    public void lowestCommonAncestor(int key1, int key2) {
+        TreeNode node = findNode(root, key1);
+        if (node == null) {
+            System.out.println("Node does not exist with key " + key1);
+            return;
+        }
+
+        node = findNode(root, key2);
+        if (node == null) {
+            System.out.println("Node does not exist with key " + key2);
+            return;
+        }
+
+        node = lowestCommonAncestorRec(root, key1, key2);
+        System.out.println(node.key + " is the lowest common ancestor of " + key1 + " and " + key2);
+    }
+
+    private TreeNode lowestCommonAncestorRec(TreeNode root, int key1, int key2) {
+
+        if (key1 < root.key && key2 < root.key) {
+            return lowestCommonAncestorRec(root.left, key1, key2);
+        } else if (key1 > root.key && key2 > root.key) {
+            return lowestCommonAncestorRec(root.right, key1, key2);
+        } else {
+            return root;
+        }
+    }
+
+    public void calculateDistanceTwoNodes(int key1, int key2) {
+        TreeNode node = findNode(root, key1);
+        if (node == null) {
+            System.out.println("Node does not exist with key " + key1);
+            return;
+        }
+
+        node = findNode(root, key2);
+        if (node == null) {
+            System.out.println("Node does not exist with key " + key2);
+            return;
+        }
+
+        node = lowestCommonAncestorRec(root, key1, key2);
+        int n1 = findEdges(node, key1);
+        int n2 = findEdges(node, key2);
+        System.out.println(n1 + n2 + " is the distance of " + key1 + " and " + key2);
+    }
+
+    private int findEdges(TreeNode root, int key) {
+        if (root == null) {
+            return 0;
+        }
+        if (key < root.key) {
+            return findEdges(root.left, key) + 1;
+        } else if (key > root.key) {
+            return findEdges(root.right, key) + 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public static void main(String[] args) {
+        BST myTree = new BST();
+        myTree.insert(20);
+        myTree.insert(15);
+        myTree.insert(25);
+        myTree.insert(10);
+        myTree.insert(30);
+        myTree.insert(5);
+        myTree.insert(18);
+        myTree.insert(16);
+        myTree.insert(21);
+
+        myTree.bfs(myTree.root);
+        System.out.println(" ;");
+
+        myTree.preOrder();
+        System.out.println(" ;");
+
+        myTree.lowestCommonAncestor(5, 16);
+        myTree.calculateDistanceTwoNodes(5, 16);
+
+        myTree.delete(10);
+        myTree.inOrder();
+        System.out.println(" ;");
+        myTree.delete(20);
+        myTree.postOrder();
+        System.out.println(" ;");
+        myTree.delete(100);
+    }
+}
+
+/*
+              20
+            /    \
+          15      25
+         /  \    /  \
+       10   18  21   30
+      /     /
+     5     16
+*/
